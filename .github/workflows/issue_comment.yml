@@ -8,13 +8,13 @@ jobs:
   comment-with-action:
     runs-on: ubuntu-latest
     steps:
-      - name: "dump github context"
+      - name: "Dump GitHub context"
         run: echo '${{ toJSON(github.event) }}' | jq
         shell: bash
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v4
         with:
-          issue-number: ${{ toJSON(github.event.issue.number) }}
+          issue-number: ${{ github.event.issue.number }}
           body: |
             This is a multi-line test comment
             - With GitHub **Markdown** :sparkles:
@@ -22,7 +22,7 @@ jobs:
 
             [1]: https://github.com/peter-evans/create-or-update-comment
           reactions: '+1'
-  
+
   comment-with-api:
     runs-on: ubuntu-latest
     steps:
@@ -33,8 +33,6 @@ jobs:
             -f body='Commnet but from API Call not action'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ORGANIZATION: ${{ github.event.organization.login }}
+          ORGANIZATION: ${{ github.event.repository.owner.login }}
           REPOSITORY: ${{ github.event.repository.name }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-        
-      
